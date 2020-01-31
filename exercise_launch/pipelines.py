@@ -3,14 +3,13 @@ import airflow
 from airflow.models import DAG
 from airflow.operators import DummyOperator
 
-args = {
-    "schedule_interval": "0 0/1 * 1/1 * ? *",
-}
+args = {}
 
 dag = DAG(
     dag_id="test_scheduled_interval",
     default_args=args,
     description="DAG just scheduling the next step",
+    schedule_interval="0 0/1 * 1/1 * ? *"
 )
 
 with dag:
