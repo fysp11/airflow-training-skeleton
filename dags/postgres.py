@@ -26,7 +26,7 @@ with dag:
         task_id='pg_to_gcs',
         sql=query,
         bucket='airflow-postgres-1234',
-        filename='output',
+        filename='output-{{ ds }}',
         google_cloud_storage_conn_id='google_cloud_storage_default'
     )
 
