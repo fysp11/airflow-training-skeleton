@@ -30,7 +30,7 @@ weekday_person_to_email = {
 
 
 def _get_task_id(execution_date, **context):
-    return 'email_' + weekday_person_to_email[execution_date.today().weekday()]
+    return 'email_' + weekday_person_to_email[execution_date.weekday()]
 
 
 def _print_weekday(execution_date: datetime, **context):
