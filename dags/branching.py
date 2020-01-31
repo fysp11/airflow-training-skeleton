@@ -21,8 +21,8 @@ def _get_weekday(execution_date: datetime, **context):
     return execution_date.strftime('%a')
 
 
-def _print_weekday(**context):
-    print(_get_weekday(context))
+def _print_weekday(execution_date: datetime, **context):
+    print(execution_date.strftime('%a'))
 
 
 with dag:
@@ -39,7 +39,7 @@ with dag:
 
     users = ['bob', 'alice', 'joe']
 
-    branches = [DummyOperator(taskid=f'email_{user}') for user in users]
+    branches = [DummyOperator(taskid='email_' + user) for user in users]
 
     end = BashOperator(
         task_id='end',
