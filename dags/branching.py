@@ -22,7 +22,7 @@ def _get_weekday(execution_date: datetime, **context):
 
 
 def _print_weekday(**context):
-    print(_get_weekday(**context))
+    print(_get_weekday(context))
 
 
 with dag:
