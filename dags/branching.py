@@ -17,8 +17,8 @@ dag = DAG(
     schedule_interval=timedelta(hours=2, minutes=30)
 )
 
-def _get_weekday(execution_date: datetime, **context):
-    return execution_date.strftime('%a')
+def _get_task_id(task, **context):
+    return f'email_{task.task_id}'
 
 
 def _print_weekday(execution_date: datetime, **context):
@@ -33,7 +33,7 @@ with dag:
     )
     branching = BranchPythonOperator(
         task_id='branching',
-        python_callable=_get_weekday,
+        python_callable=_get_task_id,
         provide_context=True,
     )
 
