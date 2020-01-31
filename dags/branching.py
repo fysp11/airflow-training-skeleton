@@ -18,7 +18,7 @@ dag = DAG(
 )
 
 def _get_task_id(templates_dict, **context):
-    return f'email_{templates_dict['email']}'
+    return 'email_' + templates_dict['email']
 
 
 def _print_weekday(execution_date: datetime, **context):
