@@ -3,6 +3,8 @@ import airflow
 from airflow.models import DAG
 from airflow.operators import DummyOperator
 
+from datetime import timedelta
+
 args = {
     "owner": "godatadriven",
     "start_date": airflow.utils.dates.days_ago(10)
@@ -12,7 +14,7 @@ dag = DAG(
     dag_id="test_scheduled_interval",
     default_args=args,
     description="DAG just scheduling the next step",
-    schedule_interval="0 0 * * *"
+    schedule_interval=timedelta(hours=2, minutes=30)
 )
 
 with dag:
