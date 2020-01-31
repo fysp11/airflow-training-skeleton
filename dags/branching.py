@@ -39,7 +39,7 @@ with dag:
 
     users = ['bob', 'alice', 'joe']
 
-    branches = [DummyOperator(taskid='email_' + user) for user in users]
+    branches = [DummyOperator(task_id='email_' + user) for user in users]
 
     end = BashOperator(
         task_id='end',
