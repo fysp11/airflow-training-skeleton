@@ -24,7 +24,7 @@ query = 'SELECT * FROM land_registry_price_paid_uk LIMIT 10'
 with dag:
     pg_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='pg_to_gcs',
-        query=query,
+        sql=query,
         bucket='airflow-postgres-1234',
         filename='output',
         google_cloud_storage_conn_id='google_cloud_storage_default'
