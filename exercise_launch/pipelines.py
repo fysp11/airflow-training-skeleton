@@ -3,7 +3,10 @@ import airflow
 from airflow.models import DAG
 from airflow.operators import DummyOperator
 
-args = {}
+args = {
+    "owner": "godatadriven",
+    "start_date": airflow.utils.dates.days_ago(10)
+}
 
 dag = DAG(
     dag_id="test_scheduled_interval",
