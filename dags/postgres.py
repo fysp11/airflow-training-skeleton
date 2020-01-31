@@ -13,7 +13,7 @@ args = {
 }
 
 dag = DAG(
-    dag_id=__name__,
+    dag_id='postgres',
     default_args=args,
     description="DAG for using " + __name__,
     schedule_interval=timedelta(hours=2, minutes=30)
