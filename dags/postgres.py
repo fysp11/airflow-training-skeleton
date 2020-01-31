@@ -33,7 +33,6 @@ with dag:
     end = BashOperator(
         task_id='end',
         bash_command='echo "That\'s it folks!"',
-        trigger_rule=TriggerRule.ONE_SUCCESS
     )
 
     pg_to_gcs >> end
