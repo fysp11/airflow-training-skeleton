@@ -45,7 +45,7 @@ with dag:
 
     end = BashOperator(
         task_id='end',
-        bash_command='echo "That\'s it folks!',
+        bash_command='echo "That\'s it folks!"',
         trigger_rule='none_failed'
     )
 
