@@ -17,15 +17,16 @@ dag = DAG(
     schedule_interval=timedelta(hours=2, minutes=30)
 )
 
-def print_exec_date(execution_date, **context):
-    print(execution_date)
+def print_exec_date(execution_date, template_dict, **context):
+    print(f"{templates_dict.get('name')} says {execution_date}!")
 
 
 with dag:
     print_exec_date = PythonOperator(
         task_id='print_exec_date',
         python_callable=print_exec_date,
-        provide_context=True
+        provide_context=True,
+        templates_dict={'name': 'Felipe'}
     )
     wait_01 = BashOperator(task_id='wait_01', bash_command="sleep 1")
     wait_05 = BashOperator(task_id='wait_05', bash_command="sleep 5")
