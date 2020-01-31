@@ -17,8 +17,8 @@ dag = DAG(
     schedule_interval=timedelta(hours=2, minutes=30)
 )
 
-def _get_task_id(task, **context):
-    return f'email_{task.task_id}'
+def _get_task_id(templates_dict, **context):
+    return f'email_{templates_dict['email']}'
 
 
 def _print_weekday(execution_date: datetime, **context):
@@ -35,6 +35,9 @@ with dag:
         task_id='branching',
         python_callable=_get_task_id,
         provide_context=True,
+        templates_dict={
+            'email': 'alice'
+        }
     )
 
     users = ['bob', 'alice', 'joe']
