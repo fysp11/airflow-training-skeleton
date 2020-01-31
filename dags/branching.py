@@ -18,8 +18,19 @@ dag = DAG(
     schedule_interval=timedelta(hours=2, minutes=30)
 )
 
-def _get_task_id(templates_dict, **context):
-    return 'email_' + templates_dict['email']
+weekday_person_to_email = {
+    0: 'bob',
+    1: 'joe',
+    2: 'alice',
+    3: 'joe',
+    4: 'alice',
+    5: 'alice',
+    6: 'alice',
+}
+
+
+def _get_task_id(**context):
+    return 'email_' + weekday_person_to_email[datetime.today().weekday()]
 
 
 def _print_weekday(execution_date: datetime, **context):
@@ -32,14 +43,14 @@ with dag:
         python_callable=_print_weekday,
         provide_context=True,
     )
-    users = ['bob', 'alice', 'joe']
 
     branching = BranchPythonOperator(
         task_id='branching',
         python_callable=_get_task_id,
         provide_context=True,
-        templates_dict={'email': random.choice(users)}
     )
+
+    users = ['bob', 'alice', 'joe']
 
     branches = [DummyOperator(task_id='email_' + user) for user in users]
 
