@@ -2,11 +2,8 @@ import airflow
 import random
 
 from airflow.models import DAG
-from airflow.operators import BashOperator, PythonOperator, DummyOperator
-from airflow.utils.trigger_rule import TriggerRule
+from airflow.operators import BashOperator
 from airflow.contrib.operators.postgres_to_gcs_operator import PostgresToGoogleCloudStorageOperator
-
-from airflow.hooks.postgres_hook import PostgresHook
 
 from datetime import timedelta, datetime
 
@@ -28,6 +25,15 @@ with dag:
     pg_to_gcs = PostgresToGoogleCloudStorageOperator(
         task_id='pg_to_gcs',
         query=query,
-        bucket='airflow-postgres-1234'
+        bucket='airflow-postgres-1234',
+        filename='output',
+        google_cloud_storage_conn_id='google_cloud_storage_default'
     )
-    pg_to_gcs
+
+    end = BashOperator(
+        task_id='end',
+        bash_command='echo "That\'s it folks!"',
+        trigger_rule=TriggerRule.ONE_SUCCESS
+    )
+
+    pg_to_gcs >> end
