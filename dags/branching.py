@@ -1,4 +1,5 @@
 import airflow
+import random
 
 from airflow.models import DAG
 from airflow.operators import BashOperator, PythonOperator, DummyOperator, BranchPythonOperator
@@ -31,16 +32,14 @@ with dag:
         python_callable=_print_weekday,
         provide_context=True,
     )
+    users = ['bob', 'alice', 'joe']
+
     branching = BranchPythonOperator(
         task_id='branching',
         python_callable=_get_task_id,
         provide_context=True,
-        templates_dict={
-            'email': 'alice'
-        }
+        templates_dict={'email': random.choice(users)}
     )
-
-    users = ['bob', 'alice', 'joe']
 
     branches = [DummyOperator(task_id='email_' + user) for user in users]
 
