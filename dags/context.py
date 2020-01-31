@@ -17,7 +17,7 @@ dag = DAG(
     schedule_interval=timedelta(hours=2, minutes=30)
 )
 
-def print_exec_date(execution_date, template_dict, **context):
+def print_exec_date(execution_date, templates_dict, **context):
     print(f"{templates_dict.get('name')} says {execution_date}!")
 
 
