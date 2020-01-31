@@ -3,6 +3,7 @@ import random
 
 from airflow.models import DAG
 from airflow.operators import BashOperator, PythonOperator, DummyOperator, BranchPythonOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 from datetime import timedelta, datetime
 
@@ -57,7 +58,7 @@ with dag:
     end = BashOperator(
         task_id='end',
         bash_command='echo "That\'s it folks!"',
-        trigger_rule='none_failed'
+        trigger_rule=TriggerRule.ONE_SUCCESS
     )
 
     print_weekday >> branching >> branches >> end
