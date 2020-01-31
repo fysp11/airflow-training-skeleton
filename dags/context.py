@@ -1,7 +1,7 @@
 import airflow
 
 from airflow.models import DAG
-from airflow.operators import BashOperator, PythonOperator
+from airflow.operators import BashOperator, PythonOperator, DummyOperator
 
 from datetime import timedelta
 
