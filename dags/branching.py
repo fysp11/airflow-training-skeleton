@@ -47,4 +47,4 @@ with dag:
         trigger_rule='none_failed'
     )
 
-    print_weekday >> branching >> end
+    print_weekday >> branches >> end
