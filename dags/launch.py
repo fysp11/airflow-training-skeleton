@@ -1,14 +1,11 @@
-import json
-import pathlib
-import posixpath
 import airflow
-import requests
+import json
 
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 from operators.launch_library_operator import LaunchLibraryOperator
 
-args = {
+ARGS = {
     "owner": "godatadriven",
     "start_date": airflow.utils.dates.days_ago(10),
 }
@@ -27,30 +24,27 @@ def _print_stats(ds, **context):
             print(f"No rockets found in {f.name}")
 
 
-dag = DAG(
+with DAG(
     dag_id="download_rocket_launches",
-    default_args=args,
+    default_args=ARGS,
     description="DAG downloading rocket launches from Launch Library.",
     schedule_interval="0 0 * * *"
-)
+):
+    download_rocket_launches = LaunchLibraryOperator(
+        task_id="download_rocket_launches",
+        request_conn_id='launch_rockets_conn',
+        endpoint='launch',
+        params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
+        result_path='testing_folder',
+        result_filename='result.json',
+        do_xcom_push=False,
+        provide_context=True,
+    )
 
-download_rocket_launches = LaunchLibraryOperator(
-    task_id="download_rocket_launches",
-    request_conn_id='launch_rockets_conn',
-    endpoint='launch',
-    params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
-    result_path='testing_folder',
-    result_filename='result.json',
-    do_xcom_push=False,
-    provide_context=True,
-    dag=dag
-)
+    print_stats = PythonOperator(
+        task_id="print_stats",
+        python_callable=_print_stats,
+        provide_context=True,
+    )
 
-print_stats = PythonOperator(
-    task_id="print_stats",
-    python_callable=_print_stats,
-    provide_context=True,
-    dag=dag
-)
-
-download_rocket_launches >> print_stats
+    download_rocket_launches >> print_stats

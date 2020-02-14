@@ -43,20 +43,20 @@ class LaunchLibraryOperator(BaseOperator):
 
         gcp_storage_hook = GoogleCloudStorageHook()
 
-        full_path = path.join(self._result_path, f'ds={context["ds"]}', self._result_filename)
+        full_path = path.join(self._result_path, f'ds={context["ds"]}')
 
         full_io_path = path.join('/tmp/', full_path)
 
         pathlib.Path(full_io_path).mkdir(parents=True, exist_ok=True)
 
-        with open(full_io_path, "w") as f:
+        with open(path.join(full_io_path, self._result_filename), "w") as f:
             print(f"Writing to file {f.name}")
             f.write(response.text)
 
         if self._result_bucket:
             gcp_storage_hook.upload(
                 bucket=self._result_bucket,
-                object=full_path,
+                object=path.join(full_path, self._result_filename),
                 filename=full_io_path
             )
 
