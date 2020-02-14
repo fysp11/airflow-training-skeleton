@@ -27,27 +27,30 @@ def _print_stats(ds, **context):
             print(f"No rockets found in {f.name}")
 
 
-with DAG(
-        dag_id="download_rocket_launches",
-        default_args=args,
-        description="DAG downloading rocket launches from Launch Library.",
-        schedule_interval="0 0 * * *"
-):
-    download_rocket_launches = LaunchLibraryOperator(
-        task_id="download_rocket_launches",
-        request_conn_id='launch_rockets_conn',
-        endpoint='launch',
-        params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
-        result_path='testing_folder',
-        result_filename='result.json',
-        do_xcom_push=False,
-        provide_context=True
-    )
+dag = DAG(
+    dag_id="download_rocket_launches",
+    default_args=args,
+    description="DAG downloading rocket launches from Launch Library.",
+    schedule_interval="0 0 * * *"
+)
 
-    print_stats = PythonOperator(
-        task_id="print_stats",
-        python_callable=_print_stats,
-        provide_context=True
-    )
+download_rocket_launches = LaunchLibraryOperator(
+    task_id="download_rocket_launches",
+    request_conn_id='launch_rockets_conn',
+    endpoint='launch',
+    params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
+    result_path='testing_folder',
+    result_filename='result.json',
+    do_xcom_push=False,
+    provide_context=True,
+    dag=dag
+)
 
-    download_rocket_launches >> print_stats
+print_stats = PythonOperator(
+    task_id="print_stats",
+    python_callable=_print_stats,
+    provide_context=True,
+    dag=dag
+)
+
+download_rocket_launches >> print_stats
