@@ -35,12 +35,12 @@ with DAG(
         schedule_interval="0 0 * * *"):
     download_rocket_launches = LaunchLibraryOperator(
         task_id="download_rocket_launches",
-        request_conn_id: 'launch_rockets_conn',
-        endpoint: 'launch',
-        params: dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
+        request_conn_id='launch_rockets_conn',
+        endpoint='launch',
+        params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
                 #  result_bucket: 'europe-west1-training-airfl-3df4cfa2-bucket',
-        result_path: 'testing_folder',
-        result_filename: 'result.json',
+        result_path='testing_folder',
+        result_filename='result.json',
         do_xcom_push=False
     )
 
