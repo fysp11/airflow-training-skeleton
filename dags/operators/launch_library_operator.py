@@ -14,13 +14,13 @@ class LaunchLibraryOperator(BaseOperator):
     @apply_defaults
     def __init__(self,
                  request_conn_id: str,
-                 gcs_conn_id: str = None,
                  endpoint: str,
-                 params: dict = None,
-                 result_bucket: str = None,
                  result_path: str,
                  result_filename: str,
-                 do_xcom_push=False
+                 params: dict = None,
+                 result_bucket: str = None,
+                 gcs_conn_id: str = None,
+                 do_xcom_push=False,
                  * args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +44,7 @@ class LaunchLibraryOperator(BaseOperator):
 
         gcp_storage_hook = GoogleCloudStorageHook()
 
-        full_path = path.join(self._result_path, f'ds={context['ds']}', self._result_filename)
+        full_path = path.join(self._result_path, f'ds={context["ds"]}', self._result_filename)
 
         full_io_path = path.join('/tmp/', full_path)
 
@@ -55,7 +55,7 @@ class LaunchLibraryOperator(BaseOperator):
             f.write(response.text)
 
         if self._result_bucket:
-            response = gcp_storage_hook.upload(
+            gcp_storage_hook.upload(
                 bucket=self._result_bucket,
                 object=full_path,
                 filename=full_io_path
