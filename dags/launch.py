@@ -6,7 +6,7 @@ import requests
 
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
-from dags.operators.launch_library_operator import LaunchLibraryOperator
+from operators.launch_library_operator import LaunchLibraryOperator
 
 args = {
     "owner": "godatadriven",
