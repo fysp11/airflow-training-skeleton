@@ -11,7 +11,6 @@ from operators.launch_library_operator import LaunchLibraryOperator
 args = {
     "owner": "godatadriven",
     "start_date": airflow.utils.dates.days_ago(10),
-    "provide_context": True
 }
 
 
@@ -32,21 +31,23 @@ with DAG(
         dag_id="download_rocket_launches",
         default_args=args,
         description="DAG downloading rocket launches from Launch Library.",
-        schedule_interval="0 0 * * *"):
+        schedule_interval="0 0 * * *"
+):
     download_rocket_launches = LaunchLibraryOperator(
         task_id="download_rocket_launches",
         request_conn_id='launch_rockets_conn',
         endpoint='launch',
         params=dict(startdate='{{ ds }}', enddate='{{ tomorrow_ds }}'),
-                #  result_bucket: 'europe-west1-training-airfl-3df4cfa2-bucket',
         result_path='testing_folder',
         result_filename='result.json',
-        do_xcom_push=False
+        do_xcom_push=False,
+        provide_context=True
     )
 
     print_stats = PythonOperator(
         task_id="print_stats",
         python_callable=_print_stats,
+        provide_context=True
     )
 
     download_rocket_launches >> print_stats
