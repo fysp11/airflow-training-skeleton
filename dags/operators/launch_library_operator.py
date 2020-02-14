@@ -1,7 +1,6 @@
 from os import path
 import pathlib
 
-from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from hooks.requests_hook import RequestsHook

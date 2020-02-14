@@ -1,0 +1,7 @@
+[FORMAT]
+max-line-length=121
+indent-string='    '
+disable=locally-disabled, locally-enabled, logging-format-interpolation
+
+[General]
+init-hook='import import_hook.py'
